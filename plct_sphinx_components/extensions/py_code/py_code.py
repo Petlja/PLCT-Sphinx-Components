@@ -17,8 +17,8 @@ def setup(app):
     app.add_node(PyCodeNode, html=(visit_pycode_node, depart_pycode_node))
 
 def copy_workers(app, env):
-    static_files = resource_filename('petlja_sphinx_extensions', 'extensions/py_code/workers')
-    if app.builder.name == 'petlja_builder':
+    static_files = resource_filename('plct_sphinx_components', 'extensions/py_code/workers')
+    if app.builder.name == 'plct_builder':
         copy_asset(static_files, app.builder.rootdir)
     else:
         copy_asset(static_files, app.builder.outdir)

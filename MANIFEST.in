@@ -1,3 +1,0 @@
-include README.md requirements.txt LICENSE
-
-recursive-include plct-sphinx-components/extensions *.js *.css *.svg *.png
