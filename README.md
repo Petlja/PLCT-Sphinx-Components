@@ -1,18 +1,18 @@
 # PLCT-Sphinx-Components
 
-The PLCT-Sphinx-Components a project designed to enhance the capabilities of Sphinx, a widely used documentation generation tool. This extension provides custom directives that are particularly useful for creating e-learning content within your Sphinx documentation.
+PLCT-Sphinx-Components is a project designed to enhance your e-learning content. These extensions are Sphinx-based and focuses on online learning content, making it an ideal choice for creating interactive and engaging online courses. 
 
 ## About the Directives
 
-All the directives provided by PLCT-Sphinx-Components are wrappers for PLCT-Web-Components. This means that they leverage the functionality of PLCT-Web-Components to provide interactive and engaging features for your Sphinx documentation.
+All the directives provided by PLCT-Sphinx-Components are wrappers for JavaScript-based components. These components facilitate a range of interactive features, such as asking multiple choice or fill in the blank questions, python based programming in the browser, executing SQL queries, and more. This enables the creation of engaging and interactive content within your Sphinx documentation.
 
-The `mchoice` and `fitb` directives, for instance, are designed to create interactive educational content within your documentation. They are implemented as wrappers around the corresponding web components provided by PLCT-Web-Components, thus allowing you to seamlessly integrate these features into your Sphinx documentation.
+PLCT-Sphinx-Components heavily relies on the [Pyodide](https://pyodide.org/en/stable/) project for running Python-based code in the browser. Pyodide brings the Python runtime to the browser via WebAssembly. This allows for the execution of Python code, data analysis, visualization, and more, all directly within the browser.
 
 ## Directives
 
 ### `mchoice` Directive
 
-The `mchoice` directive enables you to embed multiple-choice questions within your documentation. This is particularly handy for creating interactive educational content. Here's an example of how to use this directive:
+The `mchoice` directive enables you to embed multiple-choice questions within your documentation.
 
 ```rst
 .. mchoice::
@@ -28,7 +28,7 @@ In this example, a multiple-choice question is created with three answer options
 
 ### `fitb` Directive
 
-The `fitb` directive allows you to insert fill-in-the-blank questions in your documentation. This is a great way to create interactive exercises. Here's an example of how to use this directive:
+The `fitb` directive allows you to insert fill-in-the-blank questions in your documentation.
 
 ```rst
 .. fitb::
@@ -106,7 +106,7 @@ Feel free to customize the content within the directives to suit the specific in
 
 ### `PyCode` Directive
 
-The `PyCode` directive is an extension designed to execute Python code directly within web browsers using Pyodide. 
+The `PyCode` directive is an extension designed to execute Python code directly within web browsers. We leverage web workers and service workers to provide a seamless input/output experience. This means that students can start experimenting with Python directly in their browsers, without the need to install anything. This makes the first steps much easier.
 
 #### Usage
 
@@ -119,10 +119,7 @@ The `PyCode` directive is an extension designed to execute Python code directly 
 
 Optional arguments include:
 
-- `packages`: Specify additional Python packages that should be available in the Python environment. Multiple packages can be included and are separated by commas.
-
-The resulting HTML output includes an interactive code block that executes Python code using Pyodide.
-
+- `packages`: Specify additional Python packages and the environment will install it using `micropip`, a lightweight version of `pip`. This means you can use a wide range of Python packages further enhancing the learning and experimentation possibilities.
 
 ## Installation and Usage
 
@@ -141,19 +138,15 @@ To use the PLCT-Sphinx-Components in your Sphinx project, follow these steps:
        # ... other extensions ...
        'plct-sphinx-components.extensions.multiple_choice',
        'plct-sphinx-components.extensions.fill_in_the_blank',
+       'plct-sphinx-components.extensions.py_code,
    ]
    ```
 
-3. Once the extension is enabled, you can start using the `mchoice` and `fitb` directives in your documentation files as demonstrated in the examples above.
-
-
-This will render a fill-in-the-blank question where the answer is "Python".
-
-Feel free to explore the capabilities of the PLCT-Sphinx-Components to create engaging and interactive e-learning content within your Sphinx documentation.
+3. Once the extension is enabled, you can start using the directives in your documentation files as demonstrated in the examples above.
 
 ## About
 
-This project is maintained by Petlja and is aimed at enhancing the educational content creation experience using Sphinx. For more information about Petlja and its initiatives, please visit [Petlja's website](https://www.petlja.org).
+This project is maintained by Petlja and aims to enhance the educational content creation experience using Sphinx. For more information about Petlja and its initiatives, please visit [Petlja's website](https://www.petlja.org).
 
 ## License
 

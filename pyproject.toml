@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plct-sphinx-components"
-version = "0.0.3"
+version = "0.0.4"
 description = "Petlja's sphinx extensions for e-learning content."
 authors = ["Petlja <team@petlja.com>"]
 readme = "README.md"
