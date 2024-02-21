@@ -14,21 +14,21 @@ def setup(app):
     app.add_directive('db-query', DBComponentDirective)
     app.add_node(DBComponentNode, html=(visit_DBComponent_node, depart_DBComponent_node))
 
-
 TEMPLATE_START = '''
-  <db-query id="3" check-colum-name show-expected-result>
-    <file>../_static/it3_biblioteka.sql</file>
-    <name>biblioteka</name>
-    <solution-query>insert into autori values (201, 'test' , 'test')</solution-query>
-    <check-query>select * from autori</check-query>
-    <hint>select * from autor ??? </hint>
-    <textarea>insert into autori values (201, 'test' , 'test')
+  <db-query id="%(divid)s" %(check_colum_name)s %(show_expected_result)s>
+    <file>%(db_path)s</file>
+    <name>%(db_name)s</name>
+    %(solution_query)s
+    %(check_query)s
+    %(hint)s
+    <textarea>
+    %(query)s
     </textarea>
-  </db-query>
     '''
 
 
 TEMPLATE_END = '''
+  </db-query>
     '''
 
 
@@ -57,8 +57,13 @@ class DBComponentDirective(Directive):
     has_content = True
     option_spec = {}
     option_spec.update({
-        'packages': directives.unchanged,
-        'opt-in-ai': directives.unchanged,
+        'db-path': directives.unchanged,
+        'solution-query': directives.unchanged,
+        'name': directives.unchanged,
+        'check-query': directives.unchanged,
+        'hint': directives.unchanged,
+        'check-colum-name': directives.unchanged,
+        'show-expected-result': directives.unchanged,
     })
 
 
@@ -69,6 +74,42 @@ class DBComponentDirective(Directive):
         :return:
         """
         self.options['divid'] = self.arguments[0]
+
+        if 'db-path' not in self.options:
+            raise ValueError("db-path is required")
+        if 'name' not in self.options:
+            raise ValueError("name is required")
+        
+        self.options['db_path'] = self.options['db-path']
+        self.options['db_name'] = self.options['name']
+
+        if 'solution-query' in self.options:
+            self.options['solution_query'] = "<solution-query>" + self.options['solution-query'] + "</solution-query>" + "\n"
+        else:
+            self.options['solution_query'] = ""
+        
+        if 'check-query' in self.options:
+            self.options['check_query'] = "<check-query>" + self.options['check-query'] + "</check-query>" + "\n"
+        else:
+            self.options['check_query'] = ""
+
+        if 'hint' in self.options:
+            self.options['hint'] = "<hint>" + self.options['hint'] + "</hint>" + "\n"
+        else:
+            self.options['hint'] = ""
+        
+        if 'check-colum-name' in self.options:
+            self.options['check_colum_name'] = "check-colum-name"
+        else:
+            self.options['check_colum_name'] = ""
+
+        if 'show-expected-result' in self.options:
+            self.options['show_expected_result'] = "show-expected-result"
+        else:
+            self.options['show_expected_result'] = ""
+
+        self.options['query'] = encode("\n".join(self.content))
+        
         innode = DBComponentNode(self.options)
 
         return [innode]

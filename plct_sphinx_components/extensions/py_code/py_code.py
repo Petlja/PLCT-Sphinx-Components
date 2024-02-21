@@ -50,7 +50,7 @@ def depart_pycode_node(self, node):
 
 class PyCodeDirective(Directive):
     required_arguments = 1
-    optional_arguments = 1
+    optional_arguments = 0
     has_content = True
     option_spec = {}
     option_spec.update({
