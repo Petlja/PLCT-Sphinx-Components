@@ -9,48 +9,51 @@ import html
 
 def setup(app):
     setup_py_kernel(app)
-    app.add_css_file('py-code.css')
-    app.add_js_file('py-code.js')
-    app.add_directive('py-code', PyCodeDirective)
-    app.add_node(PyCodeNode, html=(visit_pycode_node, depart_pycode_node))
+    app.add_css_file('database-queries.css')
+    app.add_js_file('database-queries.js')
+    app.add_directive('db-query', DBComponentDirective)
+    app.add_node(DBComponentNode, html=(visit_DBComponent_node, depart_DBComponent_node))
 
 
 TEMPLATE_START = '''
-  <py-code id="%(divid)s" %(ai)s>
-    %(py_packages)s
-    <textarea>
-%(code)s
-      </textarea>
+  <db-query id="3" check-colum-name show-expected-result>
+    <file>../_static/it3_biblioteka.sql</file>
+    <name>biblioteka</name>
+    <solution-query>insert into autori values (201, 'test' , 'test')</solution-query>
+    <check-query>select * from autori</check-query>
+    <hint>select * from autor ??? </hint>
+    <textarea>insert into autori values (201, 'test' , 'test')
+    </textarea>
+  </db-query>
     '''
 
 
 TEMPLATE_END = '''
-    </py-code>
     '''
 
 
-class PyCodeNode(nodes.General, nodes.Element):
+class DBComponentNode(nodes.General, nodes.Element):
     def __init__(self, content):
-        super(PyCodeNode, self).__init__()
+        super(DBComponentNode, self).__init__()
         self.note = content
 
 
-def visit_pycode_node(self, node):
+def visit_DBComponent_node(self, node):
     node.delimiter = "_start__{}_".format("info")
     self.body.append(node.delimiter)
     res = TEMPLATE_START % node.note
     self.body.append(res)
 
 
-def depart_pycode_node(self, node):
+def depart_DBComponent_node(self, node):
     res = TEMPLATE_END
     self.body.append(res)
     self.body.remove(node.delimiter)
 
 
-class PyCodeDirective(Directive):
+class DBComponentDirective(Directive):
     required_arguments = 1
-    optional_arguments = 1
+    optional_arguments = 0
     has_content = True
     option_spec = {}
     option_spec.update({
@@ -66,19 +69,7 @@ class PyCodeDirective(Directive):
         :return:
         """
         self.options['divid'] = self.arguments[0]
-        self.options['code'] = encode("\n".join(self.content))
-        self.options['py_packages'] = ""
-
-        if 'packages' in self.options:
-            for package in self.options['packages'].split(','):
-                self.options['py_packages'] += "<python-package>" + package + "</python-package>" + "\n"
-
-        if 'opt-in-ai' in self.options:
-            self.options['ai'] = 'opt-in-ai'
-        else:
-            self.options['ai'] = ''
-
-        innode = PyCodeNode(self.options)
+        innode = DBComponentNode(self.options)
 
         return [innode]
     
