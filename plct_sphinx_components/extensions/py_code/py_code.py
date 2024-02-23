@@ -2,27 +2,17 @@ __author__ = 'petlja'
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
-from sphinx.util.fileutil import copy_asset
-from pkg_resources import resource_filename
+from ..python_kernel import setup_py_kernel
 import html
 
 
 
 def setup(app):
+    setup_py_kernel(app)
     app.add_css_file('py-code.css')
     app.add_js_file('py-code.js')
-    app.add_js_file('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js')
-    app.connect('env-updated', copy_workers)
     app.add_directive('py-code', PyCodeDirective)
     app.add_node(PyCodeNode, html=(visit_pycode_node, depart_pycode_node))
-
-def copy_workers(app, env):
-    static_files = resource_filename('plct_sphinx_components', 'extensions/py_code/workers')
-    if app.builder.name == 'plct_builder':
-        copy_asset(static_files, app.builder.rootdir)
-    else:
-        copy_asset(static_files, app.builder.outdir)
-
 
 
 TEMPLATE_START = '''
@@ -60,7 +50,7 @@ def depart_pycode_node(self, node):
 
 class PyCodeDirective(Directive):
     required_arguments = 1
-    optional_arguments = 1
+    optional_arguments = 0
     has_content = True
     option_spec = {}
     option_spec.update({
